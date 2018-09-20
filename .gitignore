@@ -49,7 +49,7 @@ library/securimage
 api/rest/swagger
 
 # Composer
-/vendor/
+#/vendor/
 composer.phar
 
 # Settings below are for convenience when switching branches on Dev machines
