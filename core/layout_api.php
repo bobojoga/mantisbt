@@ -140,12 +140,31 @@ function layout_page_header_end( $p_page_id = null) {
 }
 
 /**
+ * Returns true if currently logged in user is Korisnik access level 25
+ * @return boolean
+ */
+function current_user_is_korisnik(){
+    $t_default_user_access_level = auth_signup_access_level();
+    $t_current_user_access_level = current_user_get_access_level();
+    
+    if ($t_current_user_access_level == $t_default_user_access_level) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
  * Print page common elements including navbar, sidebar, info bar
  * @param string $p_active_sidebar_page sidebar page where the current page lives under
  * @return void
  */
 function layout_page_begin( $p_active_sidebar_page = null ) {
-	layout_navbar();
+    if (!current_user_is_korisnik()) {
+        layout_navbar();
+    }
+    
+//  layout_navbar();        
 
 	if( !db_is_connected() ) {
 		return;
@@ -153,7 +172,10 @@ function layout_page_begin( $p_active_sidebar_page = null ) {
 
 	layout_main_container_begin();
 
-	layout_print_sidebar( $p_active_sidebar_page );
+	if (!current_user_is_korisnik()) {
+	    layout_print_sidebar( $p_active_sidebar_page );
+	}
+//	layout_print_sidebar( $p_active_sidebar_page ); 
 
 	layout_main_content_begin();
 
