@@ -1029,6 +1029,39 @@ function layout_page_content_end() {
 	echo '</div>' , "\n";
 }
 
+function attach_login_information() {
+    # Login information
+    echo '<ul class="breadcrumb">' , "\n";
+    if( current_user_is_anonymous() ) {
+        $t_return_page = $_SERVER['SCRIPT_NAME'];
+        if( isset( $_SERVER['QUERY_STRING'] ) && !is_blank( $_SERVER['QUERY_STRING'] )) {
+            $t_return_page .= '?' . $_SERVER['QUERY_STRING'];
+        }
+        $t_return_page = string_url( $t_return_page );
+        echo ' <li><i class="fa fa-user home-icon active"></i> ' . lang_get( 'anonymous' ) . ' </li>' . "\n";
+        echo '<div class="btn-group btn-corner">' . "\n";
+        echo '  <a href="' . helper_mantis_url( auth_login_page( 'return=' . $t_return_page ) ) .
+        '" class="btn btn-primary btn-xs">' . lang_get( 'login_link' ) . '</a>' . "\n";
+        if( auth_signup_enabled() ) {
+            echo '  <a href="' . helper_mantis_url( 'signup_page.php' ) . '" class="btn btn-primary btn-xs">' 
+                . lang_get( 'signup_link' ) . '</a>' . "\n";
+        }
+        echo '</div>' . "\n";
+    } else {
+        $t_protected = current_user_get_field( 'protected' );
+        $t_access_level = get_enum_element( 'access_levels', current_user_get_access_level() );
+        $t_display_username = string_html_specialchars( current_user_get_field( 'username' ) );
+        $t_realname = current_user_get_field( 'realname' );
+        $t_display_realname = is_blank( $t_realname ) ? '' : ' ( ' . string_html_specialchars( $t_realname ) . ' ) ';
+        echo '  <li><i class="fa fa-user home-icon active"></i>';
+        $t_page = ( OFF == $t_protected ) ? 'account_page.php' : 'my_view_page.php';
+        echo '  <a href="' . helper_mantis_url( $t_page ) . '">' .
+            $t_display_username . $t_display_realname . '</a>' . "\n";
+            $t_label = layout_is_rtl() ? 'arrowed-right' : 'arrowed';
+            echo '  <span class="label hidden-xs label-default ' . $t_label . '">' . $t_access_level . '</span></li>' . "\n";
+    }
+    echo '</ul>' , "\n";
+}
 
 /**
  * Render breadcrumbs bar.
@@ -1037,44 +1070,17 @@ function layout_page_content_end() {
 function layout_breadcrumbs() {
 	echo '<div id="breadcrumbs" class="breadcrumbs noprint">' , "\n";
 
-	# Login information
-	echo '<ul class="breadcrumb">' , "\n";
-	if( current_user_is_anonymous() ) {
-		$t_return_page = $_SERVER['SCRIPT_NAME'];
-		if( isset( $_SERVER['QUERY_STRING'] ) && !is_blank( $_SERVER['QUERY_STRING'] )) {
-			$t_return_page .= '?' . $_SERVER['QUERY_STRING'];
-		}
-
-		$t_return_page = string_url( $t_return_page );
-
-		echo ' <li><i class="fa fa-user home-icon active"></i> ' . lang_get( 'anonymous' ) . ' </li>' . "\n";
-
-		echo '<div class="btn-group btn-corner">' . "\n";
-		echo '	<a href="' . helper_mantis_url( auth_login_page( 'return=' . $t_return_page ) ) .
-			'" class="btn btn-primary btn-xs">' . lang_get( 'login_link' ) . '</a>' . "\n";
-		if( auth_signup_enabled() ) {
-			echo '	<a href="' . helper_mantis_url( 'signup_page.php' ) . '" class="btn btn-primary btn-xs">' .
-				lang_get( 'signup_link' ) . '</a>' . "\n";
-		}
-		echo '</div>' . "\n";
-
+	$t_can_report_bug = access_has_any_project_level( 'report_bug_threshold' );
+	
+	if( $t_can_report_bug && current_user_is_korisnik()) {
+	    $t_bug_url = string_get_bug_report_url();
+	    echo '<a class="btn btn-primary btn-sm" href="' . $t_bug_url . '">';
+	    echo '<i class="fa fa-edit"></i> ' . lang_get( 'report_bug_link' );
+	    echo '</a>';
 	} else {
-		$t_protected = current_user_get_field( 'protected' );
-		$t_access_level = get_enum_element( 'access_levels', current_user_get_access_level() );
-		$t_display_username = string_html_specialchars( current_user_get_field( 'username' ) );
-		$t_realname = current_user_get_field( 'realname' );
-		$t_display_realname = is_blank( $t_realname ) ? '' : ' ( ' . string_html_specialchars( $t_realname ) . ' ) ';
-
-		echo '  <li><i class="fa fa-user home-icon active"></i>';
-		$t_page = ( OFF == $t_protected ) ? 'account_page.php' : 'my_view_page.php';
-		echo '  <a href="' . helper_mantis_url( $t_page ) . '">' .
-			$t_display_username . $t_display_realname . '</a>' . "\n";
-
-		$t_label = layout_is_rtl() ? 'arrowed-right' : 'arrowed';
-		echo '  <span class="label hidden-xs label-default ' . $t_label . '">' . $t_access_level . '</span></li>' . "\n";
+	    attach_login_information();
 	}
-	echo '</ul>' , "\n";
-
+	
 	# Recently visited
 	if( last_visited_enabled() ) {
 		$t_ids = last_visited_get_array();
