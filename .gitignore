@@ -1,5 +1,5 @@
 # Config files
-config/
+#config/
 mantis_offline.php
 
 # Docbook builds
@@ -13,7 +13,7 @@ docbook/*/tmp
 build/
 
 # Untracked plugins
-plugins/*
+#plugins/*
 !plugins/MantisCoreFormatting
 !plugins/MantisGraph
 !plugins/XmlImportExport
@@ -55,9 +55,9 @@ composer.phar
 # Settings below are for convenience when switching branches on Dev machines
 
 # v1.2.x config files
-config_inc.php
-custom_constants_inc.php
-custom_functions_inc.php
-custom_relationships_inc.php
-custom_strings_inc.php
+#config_inc.php
+#custom_constants_inc.php
+#custom_functions_inc.php
+#custom_relationships_inc.php
+#custom_strings_inc.php
 api/soap/mc_config_inc.php
