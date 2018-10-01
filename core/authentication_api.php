@@ -163,7 +163,7 @@ function auth_cas_ldap_translate( $p_cas_id, $p_update_user='' )
     
     # Build LDAP search filter, attribute list from CAS ID
     $t_search_filter = "(&$t_ldap_organization($t_ldap_uid_field=$p_cas_id))";
-    $t_search_attrs = array_values($t_ldap_required  $t_ldap_fields);      # array union
+    $t_search_attrs = array_values($t_ldap_required + $t_ldap_fields);      # array union
     
     # Use Mantis ldap_api to connect to LDAP
     $t_ds = ldap_connect_bind();
