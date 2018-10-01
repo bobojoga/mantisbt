@@ -42,6 +42,7 @@ $g_cas_ldap_update = '';
 $g_ldap_language_keys = '';
 $g_ldap_language_values = '';
 $g_path = '../CAS/';
+$g_login_method = 'CAS_AUTH';
 
 
 # --- Roles Configuration ---
