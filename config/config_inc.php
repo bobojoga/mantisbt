@@ -43,6 +43,8 @@ $g_ldap_language_keys = '';
 $g_ldap_language_values = '';
 $g_path = '../CAS/';
 $g_login_method = 'CAS_AUTH';
+$g_log_level = 'ALL';
+$g_log_destination = 'file:/var/www/html/mantis/temp/mantis.log';
 
 
 # --- Roles Configuration ---
