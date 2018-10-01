@@ -23,6 +23,27 @@ $g_from_email           = 'mantis@igea.hr';        # the "From: " field in email
 $g_return_path_email    = 'dragan.podvezanec@gmail.com';  # the return address for bounced mail
 $g_window_title = 'ESDEGE';
 
+
+# --- CAS Configuration ---
+$g_cas_debug = '';
+$g_cas_version = '2.0'; 
+$g_cas_server = '10.201.26.186';
+$g_cas_port = 443;
+$g_cas_uri = '/cas';
+$g_cas_use_ldap = OFF;
+$g_ldap_organization = '';
+$g_ldap_root_dn = '';
+$g_ldap_language_field = '';
+$g_ldap_uid_field = '';
+$g_ldap_mantis_uid = 'uid';
+$g_cas_ldap_update_fields = '';
+$g_cas_ldap_update_map = '';
+$g_cas_ldap_update = '';
+$g_ldap_language_keys = '';
+$g_ldap_language_values = '';
+$g_path = '../CAS/';
+
+
 # --- Roles Configuration ---
 $g_limit_reporters = ON;
 $g_access_levels_enum_string = '25:korisnik,55:korisnicka_podrska_dgu,70:korisnicka_podrska_igea,90:administrator';

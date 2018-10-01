@@ -54,6 +54,13 @@ if( $f_install ) {
 	$t_return = 'admin/install.php';
 }
 
+if ( CAS_AUTH == config_get_global( 'login_method' ) ) {
+	# This will detour to the CAS login page if needed
+    $f_password = '';
+    $f_username = auth_cas_get_name();
+    # User is always authenticated by this point
+}
+
 $f_username = auth_prepare_username( $f_username );
 $f_password = auth_prepare_password( $f_password );
 

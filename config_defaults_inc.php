@@ -2007,7 +2007,7 @@ $g_wrap_in_preformatted_text = ON;
 
 /**
  * Login authentication method. Must be one of
- * MD5, LDAP, BASIC_AUTH or HTTP_AUTH.
+ * MD5, LDAP, BASIC_AUTH, HTTP_AUTH or CAS_AUTH.
  * Note: you may not be able to easily switch encryption methods, so this
  * should be carefully chosen at install time. However, MantisBT will attempt
  * to "fall back" to older methods if possible.
@@ -4866,3 +4866,109 @@ $g_webservice_rest_enabled = ON;
  * the attachment is linked to the note.  Or 0 for disabling this feature.
  */
 $g_issue_activity_note_attachments_seconds_threshold = 3;
+
+
+#######################
+# Mantis CAS Settings #
+#######################
+
+# --- using phpCAS -------------
+/**
+ * @global string $g_cas_server
+ */
+$g_cas_server = 'localhost';
+
+/**
+ * @global int $g_cas_port
+ */
+$g_cas_port = 443;
+
+/**
+ * The CAS path on the server. E.g. '/cas'
+ * @global string $g_cas_uri
+ */
+$g_cas_uri = '/cas';
+
+/**
+ * The CAS validation URL to the server
+ * @global string $g_cas_validation
+ */
+$g_cas_validation = '';
+
+/**
+ * Protocol version 2.0 (to use CAS) or S1 (to use SAML)
+ * @global $g_cas_version string
+ */
+$g_cas_version = '2.0';
+
+/**
+ * Full path incl filename to the cas debug log file
+ * @global string $g_cas_debug
+ */
+$g_cas_debug = '';
+
+/**
+ * When using SAML the CAS can provide user attributes
+ * @global boolean $g_cas_saml_attributes
+ */
+$g_cas_saml_attributes = OFF;
+
+/**
+ * Array with two entries: name => ..., mail => ...
+ * Look in your WEB-INF/deployerConfigContext.xml at the CAS server
+ * @global array $g_cas_saml_map
+ */
+$g_cas_saml_map = array( 'name' => '', 'mail' => '' );
+
+
+# --- CAS  LDAP -------------
+/**
+ * Translate CAS username through LDAP.
+ * @global $g_cas_use_ldap int
+ */
+$g_cas_use_ldap     = OFF;
+
+/**
+ * The LDAP field matching the Mantis username.
+ * @global $g_ldap_mantis_udi string
+ */
+$g_ldap_mantis_uid  = 'uid';
+
+/**
+ * Should Mantis update user details from LDAP while authenticating with CAS?
+ * @global $g_cas_ldap_update int
+ */
+$g_cas_ldap_update  = OFF;
+
+/**
+ * E.g. 'cn,userpassword'.
+ * @global $g_cas_ldap_update_fields string
+ */
+$g_cas_ldap_update_fields = '';
+
+/**
+ * E.g. 'realname,password'.
+ * @global $g_cas_ldap_update_map string
+ */
+$g_cas_ldap_update_map    = '';
+
+/**
+ * This is the field in LDAP to use to set the user's language preference.
+ * @global $g_ldap_language_field string
+ */
+$g_ldap_language_field = '';
+
+/**
+ * E.g. 'en,zh_hans,ko'.
+ * @global $g_ldap_language_keys string
+ */
+$g_ldap_language_keys = '';
+
+/**
+ * E.g. 'english,chinese_simplified,korean'.
+ * @global $g_ldap_language_values string
+ */
+$g_cas_ldap_update_values    = '';
+
+
+

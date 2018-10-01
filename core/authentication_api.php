@@ -75,6 +75,178 @@ $g_cache_cookie_valid = null;
 $g_cache_current_user_id = null;
 
 /**
+ * Initialize phpCAS.
+ */
+function auth_cas_init() {
+    # phpCAS must be installed in the include path
+    # or in the Mantis directory.
+    require_once('CAS/CAS.php');
+    
+    static $s_initialized=false;
+    
+    if (! $s_initialized ) {
+        phpCAS::setDebug(config_get( 'cas_debug' ));
+        ## These should be set in config_inc.php
+        $t_server_version = config_get( 'cas_version' );
+        $t_server_cas_server = config_get( 'cas_server' );
+        $t_server_port = config_get( 'cas_port' );
+        $t_server_uri = config_get( 'cas_uri' );
+        $t_start_session = (boolean)FALSE; # Mantis takes care of its own session
+        
+        phpCAS::client($t_server_version, $t_server_cas_server, $t_server_port, $t_server_uri, $t_start_session);
+        if (method_exists('phpCAS', 'setNoCasServerValidation')) {
+            // no SSL validation for the CAS server
+            phpCAS::setNoCasServerValidation();
+        }
+        
+        $s_initialized = true;
+    }
+    
+}
+
+
+/**
+ * Fetches the user's CAS name, authenticating if needed.
+ * Can translate CAS login name to Mantis username through LDAP.
+ */
+function auth_cas_get_name()
+{
+    # Get CAS username from phpCAS
+    auth_cas_init();
+    phpCAS::forceAuthentication();
+    $t_cas_id = phpCAS::getUser();
+    
+    # If needed, translate the CAS username through LDAP
+    $t_username = $t_cas_id;
+    if (config_get( 'cas_use_ldap', false )) {
+        $t_username = auth_cas_ldap_translate( $t_cas_id );
+    }
+    return $t_username;
+}
+
+
+/**
+ * Takes an ID string, and looks up the LDAP directory to find
+ * the matching username for Mantis.
+ *
+ * Optionally, also update the user information in the Mantis user
+ * table.
+ *
+ * @param $p_cas_id string Typically, the username given by phpCAS.
+ * @param $p_update_user bool Whether or not to update user details from LDAP.
+ */
+function auth_cas_ldap_translate( $p_cas_id, $p_update_user='' )
+{
+    
+    # Please make sure the Mantis CAS and LDAP settings are set in config_inc.php
+    
+    $t_ldap_organization    = config_get( 'ldap_organization' );
+    $t_ldap_root_dn                 = config_get( 'ldap_root_dn' );
+    
+    # Required fields in LDAP for CAS
+    $t_ldap_language_field = config_get( 'ldap_language_field', '' );
+    $t_ldap_uid_field = config_get( 'ldap_uid_field', 'uid' ) ;
+    $t_ldap_mantis_uid = config_get( 'ldap_mantis_uid', 'uid' );
+    $t_ldap_required = array( $t_ldap_uid_field, $t_ldap_mantis_uid, 'dn' );
+    if ($t_ldap_language_field) {
+        // Add language field to attributes list only if it is configured.
+        $t_ldap_required[] = $t_ldap_language_field;
+    }
+    $t_ldap_required = array_combine( $t_ldap_required, $t_ldap_required );
+    
+    # User-defined fields to fetch from LDAP...
+    $t_ldap_fields = explode( ',', config_get( 'cas_ldap_update_fields' ) );
+    $t_ldap_fields = array_combine( $t_ldap_fields, $t_ldap_fields );
+    # ...which are mapped to Mantis user fields
+    $t_ldap_map = explode( ',', config_get( 'cas_ldap_update_map' ) );
+    $t_ldap_map = array_combine( $t_ldap_map, $t_ldap_map );
+    
+    # Build LDAP search filter, attribute list from CAS ID
+    $t_search_filter = "(&$t_ldap_organization($t_ldap_uid_field=$p_cas_id))";
+    $t_search_attrs = array_values($t_ldap_required  $t_ldap_fields);      # array union
+    
+    # Use Mantis ldap_api to connect to LDAP
+    $t_ds = ldap_connect_bind();
+    $t_sr   = ldap_search( $t_ds, $t_ldap_root_dn, $t_search_filter, $t_search_attrs );
+    $t_info = ldap_get_entries( $t_ds, $t_sr );
+    # Parse the LDAP entry to find the Mantis username
+    if ( $t_info ) {
+        # Get Mantis username
+        $t_username = $t_info[0][$t_ldap_mantis_uid][0];
+        
+        # @@@ The fact that we got here means the user is authenticated
+        # @@@ by CAS, and has an LDAP entry.
+        # @@@ We might as well update other user details since we are here.
+        
+        # If no argument given, check settings
+        if ( '' == $p_update_user ) {
+            $p_update_user = config_get( 'cas_ldap_update', FALSE );
+        }
+        # If there's a user record, then update it
+        if ( $p_update_user ) {
+            # Only proceed if the field map arrays are the same length
+            $t_field_map = array_combine( $t_ldap_fields, $t_ldap_map );
+            if ($t_field_map) {
+                # If user is new, then we must create their account before updating it
+                # @@@ ( make sure $g_allow_blank_email == ON )
+                $t_userid = user_get_id_by_name($t_username);
+                if ( false == $t_userid ) {
+                    user_create( $t_username, '' );
+                    # @@@ Wow, this is pretty lame
+                    $t_userid = user_get_id_by_name($t_username);
+                }
+                # @@@ maybe we can optimize this to write all fields at once?
+                foreach ( $t_field_map as $key=>$t_userfield ) {
+                    if (isset($t_info[0][$key][0])) {
+                        user_set_field( $t_userid, $t_userfield, $t_info[0][$key][0] );
+                    }
+                }
+            }
+            
+            // Update user's overall language preference
+            if ($t_ldap_language_field) {
+                $t_language = $t_info[0][$t_ldap_language_field][0];
+                // Map the LDAP language field to Mantis' language field if needed
+                $t_language_keys = config_get( 'ldap_language_keys', '');
+                $t_language_values = config_get( 'ldap_language_values', '');
+                $t_language_map = array_combine(
+                    explode(',', $t_language_keys),
+                    explode(',', $t_language_values)
+                    );
+                if (isset($t_language_map[$t_language])) {
+                    $t_language = $t_language_map[$t_language];
+                }
+                user_pref_set_pref($t_userid, 'language', $t_language);
+            }
+        }
+    }
+    ldap_free_result( $t_sr );
+    ldap_unbind( $t_ds );
+    
+    return $t_username;
+}
+
+
+/**
+ * Logs out of CAS, redirecting to Mantis on re-login.
+ * User should already be logged out of Mantis by the time this is called.
+ * @see auth_logout()
+ */
+function auth_cas_logout()
+{
+    $t_path = config_get('path');
+    
+    auth_cas_init();
+    if (method_Exists('phpCAS', 'logoutWithUrl')) {
+        phpCAS::logoutWithUrl($t_path);
+    } else {
+        phpCAS::logout($t_path);
+    }
+}
+
+
+
+/**
  * Gets set of flags for authentication for the specified user.
  * @param int|null|bool $p_user_id The user id or null for logged in user or NO_USER/false for user that doesn't exist
  *                 in the system, that may be auto-provisioned.
@@ -405,9 +577,15 @@ function auth_prepare_password( $p_password ) {
  * @access private
  */
 function auth_auto_create_user( $p_username, $p_password ) {
-	$t_login_method = config_get_global( 'login_method' );
+	$t_login_method = config_get( 'login_method' );
 
-	if( $t_login_method == BASIC_AUTH ) {
+// 	if( $t_login_method == BASIC_AUTH ) {
+	    
+	if ( in_array( $t_login_method, array( BASIC_AUTH, CAS_AUTH ) ) ) {
+			// attempt to create the user if using BASIC_AUTH or CAS_AUTH
+			//( note: CAS_AUTH must have $g_allow_blank_email == ON )
+	    
+	    
 		$t_auto_create = true;
 	} else if( $t_login_method == LDAP && ldap_authenticate_by_username( $p_username, $p_password ) ) {
 		$t_auto_create = true;
@@ -669,6 +847,9 @@ function auth_logout() {
 
 	if( HTTP_AUTH == config_get_global( 'login_method' ) ) {
 		auth_http_set_logout_pending( true );
+	} elseif ( CAS_AUTH == config_get( 'login_method' ) ) {
+		# Redirect to CAS page to logout
+		auth_cas_logout();
 	}
 
 	session_clean();
@@ -680,7 +861,13 @@ function auth_logout() {
  * @access public
  */
 function auth_automatic_logon_bypass_form() {
-	return config_get_global( 'login_method' ) == HTTP_AUTH;
+	switch( config_get_global( 'login_method' ) ) {
+		case HTTP_AUTH:
+ 			return true;
+		case CAS_AUTH:
+			return true;
+ 	}
+ 	return false;
 }
 
 /**
@@ -716,7 +903,13 @@ function auth_does_password_match( $p_user_id, $p_test_password ) {
 
 	if( LDAP == $t_configured_login_method ) {
 		return ldap_authenticate( $p_user_id, $p_test_password );
-	}
+	} 	
+	elseif ( CAS_AUTH == $t_configured_login_method ) {
+		# CAS already took care of password verification for us
+		return true;
+	} 
+
+
 
 	if( !auth_can_use_standard_login( $p_user_id ) ) {
 		return false;
@@ -991,7 +1184,7 @@ function auth_reauthentication_expiry() {
  * @access public
  */
 function auth_reauthenticate() {
-	if( !auth_reauthentication_enabled() || BASIC_AUTH == config_get_global( 'login_method' ) || HTTP_AUTH == config_get_global( 'login_method' ) ) {
+	if( !auth_reauthentication_enabled() || in_array(config_get('login_method'), array(BASIC_AUTH, HTTP_AUTH, CAS_AUTH)) ) {
 		return true;
 	}
 
