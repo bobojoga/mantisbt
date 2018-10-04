@@ -200,11 +200,11 @@ function http_csp_emit_header() {
  */
 function http_security_headers() {
 	if( !headers_sent() ) {
-		header( 'X-Frame-Options: DENY' );
+		//header( 'X-Frame-Options: DENY' );
 
 		# Define Content Security Policy
 		http_csp_add( 'default-src', "'self'" );
-		http_csp_add( 'frame-ancestors', "'none'" );
+		http_csp_add( 'frame-ancestors', "'localhost'" );
 		http_csp_add( 'style-src', "'self'" );
 		http_csp_add( 'style-src', "'unsafe-inline'" );
 		http_csp_add( 'script-src', "'self'" );
