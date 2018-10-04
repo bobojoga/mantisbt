@@ -202,13 +202,13 @@ function http_security_headers() {
 	if( !headers_sent() ) {
 		//header( 'X-Frame-Options: DENY' );
 
-		# Define Content Security Policy
-		http_csp_add( 'default-src', "'self'" );
-		http_csp_add( 'frame-ancestors', "'localhost'" );
-		http_csp_add( 'style-src', "'self'" );
-		http_csp_add( 'style-src', "'unsafe-inline'" );
-		http_csp_add( 'script-src', "'self'" );
-		http_csp_add( 'img-src', "'self'" );
+        # Define Content Security Policy
+        http_csp_add( 'default-src', "'self'" );
+        //http_csp_add( 'frame-ancestors', "'localhost'" );
+        http_csp_add( 'style-src', "'self'" );
+        //http_csp_add( 'style-src', "'unsafe-inline'" );
+        http_csp_add( 'script-src', "'self'" );
+        http_csp_add( 'img-src', "'self'" );
 
 		# White list the CDN urls (if enabled)
 		if ( config_get_global( 'cdn_enabled' ) == ON ) {
