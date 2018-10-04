@@ -211,7 +211,7 @@ function layout_page_end() {
 	layout_page_content_end();
 	layout_main_content_end();
 
-	layout_footer();
+//	layout_footer();
 	layout_scroll_up_button();
 
 	layout_main_container_end();
@@ -236,7 +236,7 @@ function layout_admin_page_begin() {
  * @return void
  */
 function layout_admin_page_end() {
-	layout_footer();
+//	layout_footer();
 	layout_scroll_up_button();
 
 	layout_main_container_end();
