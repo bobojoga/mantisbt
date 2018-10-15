@@ -813,7 +813,7 @@ $g_copyright_statement = '';
  * user agent (web browser) language preference.
  * @global string $g_default_language
  */
-$g_default_language = 'auto';
+$g_default_language = 'croatian';
 
 /**
  * list the choices that the users are allowed to choose
