@@ -448,9 +448,6 @@ $s_month_september = 'rujna';
 $s_month_october = 'listopada';
 $s_month_november = 'studenoga';
 $s_month_december = 'prosinca';
-$s_timeline_issue_note_created = '<span class="username">%1$s</span> je komentirao bug <span class="issue_id">%2$s</span>';
-$s_timeline_issue_resolved = '<span class="username">%1$s</span> je rješio bug <span class="issue_id">%2$s</span>';
-$s_timeline_issue_assigned = '<span class="username">%1$s</span> je dodjelio bug <span class="issue_id">%2$s</span> korisniku <span class="username">%3$s</span>';
 $MANTIS_ERROR[ERROR_GENERIC] = 'U toku ove akcije pojavila se greška. Možete prijaviti grešku administratoru.';
 $MANTIS_ERROR[ERROR_SQL] = 'SQL greška detektirana.';
 $MANTIS_ERROR[ERROR_REPORT] = 'Greška u izvješću.';
@@ -464,6 +461,8 @@ $MANTIS_ERROR[ERROR_PROTECTED_ACCOUNT] = 'Korisnički račun je zaštićen. Za t
 
 $s_issue_id = 'Zadatak #';
 $s_filter_match_type = 'Vrsta podudaranja';
+$s_filter_match_all = 'Svi Uvjeti';
+$s_filter_match_any = 'Bilo Koji Uvijet';
 $s_sort = 'Poredaj po';
 $s_bugnote_order_asc = 'Uzlazno';
 $s_bugnote_order_desc = 'Silazno';
@@ -502,7 +501,7 @@ $s_dependant_on = 'roditelj od';
 $s_blocks = 'dijete od';
 $s_add_new_relationship_button = 'Dodaj';
 $s_add_user_to_monitor = 'Dodaj';
-$s_users_monitoring_bug = 'Korisnici koji nadgledaju tu prijavu';
+$s_users_monitoring_bug = 'Korisnici koji nadgledaju ovu prijavu';
 $s_monitoring_user_list = 'Lista Korisnika';
 $s_no_users_monitoring_bug = 'Nema korisnika koji nadgledaju ovu prijavu.';
 $s_activities_title = 'Prikaz aktivnosti';
@@ -525,3 +524,32 @@ $s_new_value = 'Nova Vrijednost';
 $s_date_modified = 'Datum zadnje promjene';
 $s_bugnote = 'Bilješka';
 $s_change = 'Promijeni';
+$s_create_child_bug_button = 'Kloniraj';
+$s_close_bug_button = 'Zatvori';
+
+
+# Timeline Feature Strings
+$s_timeline_issue_created = '<span class="username">%1$s</span> je napravio prijavu <span class="issue_id">%2$s</span>';
+$s_timeline_issue_file_added = '<span class="username">%1$s</span> je priložio datoteku <em>%3$s</em> na prijavu <span class="issue_id">%2$s</span>';
+$s_timeline_issue_file_deleted = '<span class="username">%1$s</span> je maknuo datoteku <em>%3$s</em> od prijave <span class="issue_id">%2$s</span>';
+$s_timeline_issue_note_created = '<span class="username">%1$s</span> je komentirao bug <span class="issue_id">%2$s</span>';
+$s_timeline_issue_monitor = '<span class="username">%1$s</span> nadgleda prijavu <span class="issue_id">%2$s</span>';
+$s_timeline_issue_unmonitor = '<span class="username">%1$s</span> je prestao nadgledati prijavu <span class="issue_id">%2$s</span>';
+$s_timeline_issue_tagged = '<span class="username">%1$s</span> je označio prijavu <span class="issue_id">%2$s</span> with <span class="tag_name">%3$s</span>';
+$s_timeline_issue_untagged = '<span class="username">%1$s</span> je maknuo oznaku <span class="tag_name">%3$s</span> od prijave <span class="issue_id">%2$s</span>';
+$s_timeline_issue_resolved = '<span class="username">%1$s</span> je rješio bug <span class="issue_id">%2$s</span>';
+$s_timeline_issue_closed = '<span class="username">%1$s</span> je zatvorio prijavu <span class="issue_id">%2$s</span>';
+$s_timeline_issue_reopened = '<span class="username">%1$s</span> je ponovno otvorio prijavu <span class="issue_id">%2$s</span>';
+$s_timeline_issue_assigned = '<span class="username">%1$s</span> je dodjelio bug <span class="issue_id">%2$s</span> korisniku <span class="username">%3$s</span>';
+$s_timeline_issue_assigned_to_self = '<span class="username">%1$s</span> izabrao prijavu <span class="issue_id">%2$s</span>';
+$s_timeline_issue_unassigned = '<span class="username">%1$s</span> poništio prijavu <span class="issue_id">%2$s</span>';
+$s_timeline_no_activity = 'Nema aktivnostu unutar zadanog vremenskog intervala.';
+
+
+$s_delete_query = 'Izbriši Filter';
+$s_query_deleted = 'Filter "%s" Izbrisan';
+$s_save_query = 'Spremi Trenutni Filter';
+$s_reset_query = 'Resetiraj Filter';
+$s_query_name = 'Ime Filter';
+$s_query_name_label = 'Ime Filtera:';
+
