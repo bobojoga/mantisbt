@@ -78,7 +78,6 @@ $g_bug_view_page_fields = array (
 	'description',
 	'category_id',
 	'priority',
-	'severity',
 );
 
 # --- Issue Details Page (New & Update) ---
@@ -95,7 +94,6 @@ $g_bug_report_page_fields = array(
 	'attachments',
 	'category_id',
 	'priority',
-        'severity',
 );
 
 /**
@@ -118,7 +116,6 @@ $g_bug_update_page_fields = array (
 	'custom_Broj predmeta',
 	'attachments',
 	'priority',
-        'severity',
 );
 
 
