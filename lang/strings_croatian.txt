@@ -553,3 +553,10 @@ $s_reset_query = 'Resetiraj Filter';
 $s_query_name = 'Ime Filter';
 $s_query_name_label = 'Ime Filtera:';
 
+$s_operation_warnings = 'Operacija je završila s greškama.';
+$s_operation_failed = 'Operacije nije izvršena uspješno.';
+
+$s_select_all = "Odaberi sve";
+$s_actiongroup_menu_attach_tags = 'Zakači oznaku';
+$s_tag_attach_long = 'Zakači oznaku';
+$s_hide_button = 'Prikaži samo izabrane';
