@@ -73,7 +73,7 @@ $(function() {
     var currentUrlIframe = window.location.href;
 
     //true ako je trenutni page bug_report_page.php
-    if (currentUrlIframe.indexOf('bug_report_page.php') !== -1) {
+    if (currentUrlIframe.indexOf('bug_report_page.php') !== -1 || currentUrlIframe.indexOf('view.php') !== -1) {
 
             $("#breadcrumbs").each(function() {
                     var $this = $(this);
