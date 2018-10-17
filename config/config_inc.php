@@ -59,7 +59,7 @@ $g_bottom_include_page = 'top_page_test.php';
 $g_default_home_page = 'view_all_bug_page.php';
 $g_short_date_format  = 'd.m.Y. H:i';
 
-$g_max_file_size = 15MB;
+$g_max_file_size = 20971520; # 20 MB
 
 # threshold for viewing roadmap
 $g_roadmap_view_threshold = NOBODY;
