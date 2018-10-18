@@ -8,7 +8,7 @@
 	------------------------------------------------------------------------------------------------
 -->
 <?php
-echo "<script type=\"text/javascript\" src=\"/js/custom_sdge.js\"> </script>";
+echo "<script type=\"text/javascript\" src=\"/mantis/js/custom_sdge.js\"> </script>";
 
 ?>
 

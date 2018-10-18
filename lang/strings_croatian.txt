@@ -560,3 +560,5 @@ $s_select_all = "Odaberi sve";
 $s_actiongroup_menu_attach_tags = 'Zakači oznaku';
 $s_tag_attach_long = 'Zakači oznaku';
 $s_hide_button = 'Prikaži samo izabrane';
+
+$s_changelog_link = 'Log Promjena';
