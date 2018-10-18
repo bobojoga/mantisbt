@@ -95,7 +95,7 @@ $(function() {
     }
     
     // dodaj naziv ureda i ime i prezime korisnika ako je bug_report_page
-    if (currentUrlIframe.indexOf('bug_report_page.php') !== -1 )
+    if (currentUrlIframe.indexOf('bug_report_page.php') !== -1 ) {
 	    $('#custom_field_29').each(function() {
 	        var imeIPrezimeKorisnikaElement = parent.document.getElementById("imeIPrezimeKorisnika");
 	        var imeIPrezime = imeIPrezimeKorisnikaElement.innerText;
