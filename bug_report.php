@@ -230,6 +230,29 @@ foreach( $t_related_custom_field_ids as $t_id ) {
 	}
 }
 
+switch ($t_category_id) {
+	# Skica izmjere i/ili Kopija plana za odrzavanje: Kontrola kvalitete / CAD pitanja
+    case 21:	
+		$t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (IGEA)" ];
+        break;
+        
+    # SDGE: prijava problema u postupku izrade DGE u sustavu    
+    case 22:	
+        $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (IGEA)" ];
+        break;
+        
+    # Pitanja vezana uz ispravnost postupanja u odnosu na važeće propise
+    case 23: 	
+        $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (DGU)" ];
+        break;
+        
+	# Inicijalni podaci: Kontrola kvalitete / Konverzija GML-a u DXF        
+	case 1:		
+        $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (DGU)" ];
+        break;
+};
+
+
 if( !empty( $t_custom_fields ) ) {
 	$t_issue['custom_fields'] = $t_custom_fields;
 }
