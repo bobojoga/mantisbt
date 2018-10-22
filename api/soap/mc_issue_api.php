@@ -431,6 +431,10 @@ function mci_issue_set_custom_fields( $p_issue_id, array &$p_custom_fields = nul
 			$t_value = $t_custom_field['value'];
 
 			if( !custom_field_validate( $t_custom_field_id, $t_value ) ) {
+				#id od polja "Prima", ne upisuje se, vec se automatski postavi u ovisnosti o kategoriji
+                if ($t_custom_field_id == 21) {
+                	return true;
+                }
 				throw new ClientException(
 					"Invalid value for custom field '$t_name'",
 					ERROR_INVALID_FIELD_VALUE,

@@ -686,6 +686,10 @@ function mci_project_custom_fields_validate( $p_project_id, &$p_custom_fields ) 
 		}
 	}
 
+		    echo '<script>';
+			echo 'console.log('. json_encode( $t_related_custom_field_ids ) .')';
+			echo '</script>';
+
 	# Validate the custom fields before adding the bug.
 	foreach( $t_related_custom_field_ids as $t_custom_field_id ) {
 		# Skip custom fields that user doesn't have access to write.
@@ -710,6 +714,10 @@ function mci_project_custom_fields_validate( $p_project_id, &$p_custom_fields ) 
 
 		if( isset( $t_custom_field_values[$t_name] ) &&
 		    !custom_field_validate( $t_custom_field_id, $t_custom_field_values[$t_name] ) ) {
+		    if($t_name == 'Prima') {
+            	return true;
+            }
+		    
 			throw new ClientException(
 				"Invalid custom field '$t_name' value.",
 				ERROR_EMPTY_FIELD,

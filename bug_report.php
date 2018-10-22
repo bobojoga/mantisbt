@@ -230,25 +230,32 @@ foreach( $t_related_custom_field_ids as $t_id ) {
 	}
 }
 
+$t_podrska_igea = "Podrska (IGEA)";
+$t_podrska_dgu = "Podrska (DGU)";
+
 switch ($t_category_id) {
-	# Skica izmjere i/ili Kopija plana za odrzavanje: Kontrola kvalitete / CAD pitanja
-    case 21:	
-		$t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (IGEA)" ];
+        # Skica izmjere i/ili Kopija plana za odrzavanje: Kontrola kvalitete / CAD pitanja
+    case 21:
+        array_push($t_custom_fields, array('field' => array( 'id' => 21) , 'value' => $t_podrska_igea));
+#       $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (IGEA)" ];
         break;
-        
-    # SDGE: prijava problema u postupku izrade DGE u sustavu    
-    case 22:	
-        $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (IGEA)" ];
+
+    # SDGE: prijava problema u postupku izrade DGE u sustavu
+    case 22:
+        array_push($t_custom_fields, array('field' => array( 'id' => 21) , 'value' => $t_podrska_igea));
+#       $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (IGEA)" ];
         break;
-        
+
     # Pitanja vezana uz ispravnost postupanja u odnosu na važeće propise
-    case 23: 	
-        $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (DGU)" ];
+    case 23:
+        array_push($t_custom_fields, array('field' => array( 'id' => 21) , 'value' => $t_podrska_dgu));
+#       $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (DGU)" ];
         break;
-        
-	# Inicijalni podaci: Kontrola kvalitete / Konverzija GML-a u DXF        
-	case 1:		
-        $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (DGU)" ];
+
+        # Inicijalni podaci: Kontrola kvalitete / Konverzija GML-a u DXF
+    case 1:
+        array_push($t_custom_fields, array('field' => array( 'id' => 21) , 'value' => $t_podrska_igea));
+#       $t_custom_fields += [ 'field' => array( 'id' => 21) , 'value' => "Podrska (DGU)" ];
         break;
 };
 
